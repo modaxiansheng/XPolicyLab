@@ -84,10 +84,12 @@ def run_case(root, name, installed, *, extra=None, missing_extra=False, fail_cal
         assert pins["content"] == "".join(f"{key}=={installed[key]}\n" for key in ("torch", "torchvision"))
         assert not Path(pins["path"]).exists(), f"Temporary pins survive exit in {name}"
         assert "constraints-reference.txt" not in " ".join(call["args"])
+        requirements = root / "XPolicyLab/policy/RSIWAM/bundle/requirements.txt"
+        assert call["constraints"][1] == {"path": str(requirements), "content": requirements.read_text()}
         if extra is not None:
-            assert call["constraints"][1] == {"path": str(extra_path), "content": extra}
+            assert call["constraints"][2] == {"path": str(extra_path), "content": extra}
         else:
-            assert len(call["constraints"]) == 1
+            assert len(call["constraints"]) == 2
     if calls:
         assert len({call["constraints"][0]["path"] for call in calls}) == 1
     return result, calls
@@ -100,6 +102,8 @@ def main():
         policy = root / "XPolicyLab/policy/RSIWAM"
         policy.mkdir(parents=True)
         shutil.copyfile(POLICY_DIR / "install.sh", policy / "install.sh")
+        (policy / "bundle").mkdir()
+        shutil.copyfile(POLICY_DIR / "bundle/requirements.txt", policy / "bundle/requirements.txt")
         (root / "XPolicyLab/setup_policy_server.py").touch()
         (root / "bin").mkdir()
         python = root / "bin/python"
@@ -120,6 +124,7 @@ def main():
             assert "--no-deps" in calls[1]["args"]
             assert "-r" in calls[0]["args"] and "-e" in calls[2]["args"]
             checks.append(name + "_versions_pinned_for_all_three_pip_commands")
+        checks.append("policy_dependency_bounds_propagated_to_xpl_install")
         result, calls = run_case(root, "extra", a800, extra="numpy==1.26.4\n")
         assert result.returncode == 0 and len(calls) == 3
         checks.append("optional_constraints_propagated_without_replacing_pins")

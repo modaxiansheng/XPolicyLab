@@ -20,7 +20,7 @@ conda activate rsiwam-policy
 bash install.sh
 ```
 
-`install.sh` requires both `torch` and `torchvision` to be installed first. It reads their installed versions without importing the GPU runtime and pins both versions for every pip invocation, so dependency resolution cannot silently replace the selected pair. It installs the bundled requirements, the local `recoverwam` source in editable mode, and XPolicyLab in the selected environment. Keep the adapter directory in place after installation. The simulator environment is separate.
+`install.sh` requires both `torch` and `torchvision` to be installed first. It reads their installed versions without importing the GPU runtime and pins both versions for every pip invocation. The bundled requirements also constrain every invocation, including XPolicyLab's dependencies, so installing the adapter cannot replace a policy dependency with an incompatible version such as NumPy 2.x. It installs the bundled requirements, the local `recoverwam` source in editable mode, and XPolicyLab in the selected environment. Keep the adapter directory in place after installation. The simulator environment is separate.
 
 Optional site constraints can be supplied with `RSIWAM_CONSTRAINTS=/path/to/constraints.txt bash install.sh`. The file must exist before installation starts; constraints that conflict with the preinstalled pair cause pip to fail. The installer does not select a CUDA build or certify driver compatibility.
 

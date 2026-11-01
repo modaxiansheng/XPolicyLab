@@ -37,7 +37,9 @@ Path(sys.argv[1]).write_text(
 )
 PY
 
-constraint_args=(-c "$torch_constraints")
+# Keep the policy's dependency bounds while installing XPolicyLab too. Its
+# transitive dependencies must not replace an already resolved policy package.
+constraint_args=(-c "$torch_constraints" -c "$SCRIPT_DIR/bundle/requirements.txt")
 if [[ -n "${RSIWAM_CONSTRAINTS:-}" ]]; then
     constraint_args+=(-c "$RSIWAM_CONSTRAINTS")
 fi
