@@ -34,6 +34,7 @@ The foundation is the frozen official VPP2 `joint2b_s100000` model; upstream cod
 ## Evidence and limitations
 
 - Real CUDA plain/encoded synthetic debug passed at commit `7e5def6e61435e823f5b346f2b9d2dd5a7a78256`; see [the evidence summary](checks/gpu_debug/SUMMARY.json). Each mode executed 20 actions and returned an identical action chunk.
+- Real installation, all 27 bundled dependency constraints and CPU imports passed at commit `776c9f3b177427c1078ee31daaa4db93f922008b` in a newly provisioned isolated environment after a corrective reinstall. This is separate from GPU evidence and does not claim a one-shot empty-environment installation; see [the installation record](checks/clean_install/SUMMARY.json).
 - Native evaluation of the same fixed candidate has begun. The full 6,300-episode suite and official organizer verification are pending.
 - Synthetic debug does not establish task success, recovery capability, clean installation, or full-episode parity with the historical implementation.
 - Historical same-scene comparisons are partial development evidence. They are not an official score, and a failure-to-success pair alone does not prove recovery within an episode.
