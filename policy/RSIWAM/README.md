@@ -1,8 +1,8 @@
 # RSIWAM
 
-**Contributor:** RSIBot | **Paper:** Technical report planned for 2026-11-25 | **arXiv:** Not available | **Original code:** [VPP2](https://github.com/roboterax/video-prediction-policy-2)
+**Contributor:** RSIBot | **Paper:** Technical report planned for 2026-11-25 | **arXiv:** Not available | **Original code:** [RSIWAM integration and source provenance](MODEL_CARD.md)
 
-RSIWAM combines the frozen official VPP2 foundation, the original RecoverWAM recovery parent (seed 20261032), and the success133 Action LoRA (seed 20261033, optimizer step 400). This is an **eval-only** adapter for RoboDojo, `env_cfg_type=arx_x5`, `action_type=ee`, with absolute world-frame poses and native gripper values. `bundle/` preserves the complete prepared runtime package, including upstream notices, source, the native observation-history wrapper, the hash-checking composition loader, and the exact small learned weights. It is not an independently pretrained foundation model, and no official score or improvement over VPP2 is claimed here.
+RSIWAM is a recovery-adapted robot policy that combines a frozen world-model foundation, a gated recovery module, and success133 Action LoRA. This **eval-only** RoboDojo adapter supports `env_cfg_type=arx_x5`, `action_type=ee`, absolute world-frame poses and native gripper values. `bundle/` contains the vendored runtime, observation-history wrapper, identity-checking loader, exact learned adaptation weights and upstream notices; the [model card](MODEL_CARD.md) documents component provenance and the fixed evaluated candidate.
 
 Shared conventions — argument meanings, checkpoint naming, split-machine deployment, `EVAL_ENV_TYPE` — are documented in the [XPolicyLab README](../../README.md). Official results: [RoboDojo LeaderBoard](https://robodojo-benchmark.com/LeaderBoard).
 
@@ -26,11 +26,11 @@ The accepted H800 service recorded Python dependencies including `torch==2.11.0+
 
 Unsupported in this eval-only adapter; `process_data.sh` is intentionally absent. Evaluation consumes XPolicyLab observations with the three RGB camera arrays and the registered robot state. The model does not decode image bytes or swap color channels. It preserves the native views for the frozen runtime's camera composition.
 
-The training source, configuration, and coverage evidence are prepared as a separate submission artifact for release with the submission. The bundled training/data utilities are preserved provenance; this adapter does not invoke them as conversion or training entrypoints. The eval-only exception and the publication timeline must be disclosed to the maintainers in the submission PR; acceptance is not implied by this local preparation.
+Training used the `success133-ee16-rgb-lossless-train-v2` prepared export, with native EE16 action/provenance fields rather than the official XPolicyLab converter output. This adapter has no dataset conversion entrypoint; the separate training source/configuration artifact records the export and its masks. The bundled training/data utilities are preserved provenance and are not invoked by evaluation. The eval-only exception and the publication timeline are disclosed in the submission PR; acceptance remains subject to maintainer review.
 
 ## Training
 
-Unsupported in this adapter; `train.sh` is intentionally absent. No training or weight update occurs during evaluation. The frozen candidate has 119 original optimizer steps plus 281 exact resumed steps, for step 400. The separate training artifact documents that lineage. The team has approved releasing the evaluated training/deployment code, exact weights, configuration and reproduction instructions within three days of verified leaderboard listing. The planned technical-report date is 2026-11-25 and is a separate deadline. Public release URLs for RSIWAM code, small weights, and the training artifact are pending.
+Unsupported in this adapter; `train.sh` is intentionally absent. No training or weight update occurs during evaluation. The frozen candidate has 119 original optimizer steps plus 281 exact resumed steps, for step 400. The separate training artifact documents that lineage. The team has approved releasing the evaluated training/deployment code, exact weights, configuration and reproduction instructions within three days of verified leaderboard listing. The planned technical-report date is 2026-11-25 and is a separate deadline. This repository contains the RSIWAM evaluation code and small adaptation weights; the separate training-artifact release remains pending.
 
 ## Evaluation
 
@@ -48,7 +48,7 @@ EVAL_ENV_TYPE=debug bash eval.sh RoboDojo stack_bowls rsiwam-original32-lora33-s
 DEBUG_OBS_ENCODED=1 EVAL_ENV_TYPE=debug bash eval.sh RoboDojo stack_bowls rsiwam-original32-lora33-step400 arx_x5 ee 7 0 0 rsiwam-policy robodojo-eval
 ```
 
-The examples are commands to run, not completed GPU tests. Debug mode still loads the full policy and needs a compatible GPU and the exact base assets. For simulator evaluation use `EVAL_ENV_TYPE=sim`. For split-machine deployment, use the standard setup scripts and the shared deployment guide.
+Real CUDA debug validation passed for commit `7e5def6e61435e823f5b346f2b9d2dd5a7a78256`: the official plain and encoded debug clients each executed one 20-action episode, and their returned action chunks were byte-identical. The [selected evidence](checks/gpu_debug/SUMMARY.json) records the exact candidate and limits. These runs reused an existing environment through an observational harness; the literal `eval.sh` launcher and clean installation were not validated by that harness. The commands above remain the documented standard launch path. For simulator evaluation use `EVAL_ENV_TYPE=sim`; for split-machine deployment, use the shared deployment guide.
 
 The standard positional `seed` controls environment evaluation and checkpoint-directory resolution. The model's sampling seed is separately fixed at `model_seed: 1`; changing the evaluation seed never changes the candidate or its inference seed. The server launcher sets `CUBLAS_WORKSPACE_CONFIG=:4096:8` before Python starts. Direct server launches must set the same variable.
 
@@ -89,7 +89,7 @@ The script verifies the fixed manifest and both included adaptation weights. Exi
 
 `rsiwam_weights_root` in `deploy.yml` takes precedence over `RSIWAM_BASE_WEIGHTS`. The adapter uses XPolicyLab's shared checkpoint resolver for these roots, the other standard explicit path keys, `ckpt_name` as a path, and conventional run directories. Relative paths resolve against `policy/RSIWAM`. With no explicit path, the normal run directory is tried before `checkpoints/<ckpt_name>`; the latter is convenient for one fixed checkpoint across evaluation seeds. Every selected base file is rehashed before model construction. Every bundled parent/LoRA and source identity is also checked; a different checkpoint is rejected regardless of its directory label.
 
-The base weights are not redistributed in this directory. Keep all upstream notices and observe the upstream asset terms. Publishing this local preparation and choosing permanent RSIWAM artifact URLs remain separate release steps.
+The base weights are not redistributed in this directory. Keep all upstream notices and observe the upstream asset terms. The public model identifier is **RSIWAM**, and the fixed checkpoint display name is **rsiwam-original32-lora33-step400**; names do not override the component identities or hashes.
 
 ## Configuration
 
@@ -102,4 +102,4 @@ The runtime consumes dual-arm `[x,y,z,qw,qx,qy,qz,gripper]` values. The top-leve
 - The nested `bundle/policy/RSIWAM` entry and its symlink instructions are historical provenance. Use this directory's top-level scripts and model instead.
 - `checks/check_adapter_contract.py` checks the copied adapter import path, robot metadata and action packing, environment/model seed separation, per-action history, client isolation/reset, terminal handling, and shell arguments using CPU fixtures. These are boundary tests, not neural-network output parity tests.
 - The original package's `bundle/checks/verification.json` records real parent/LoRA loading into a CPU structural skeleton. This round preserves and rehashes those files; it does not repeat that tensor test.
-- A clean policy installation, complete base-model load, CUDA action parity, normal and encoded debug loops, and official simulator evaluation remain unverified for this new top-level packaging. Do not substitute these CPU checks or the earlier development outcomes for official results.
+- Real full-model CUDA loading and plain/encoded synthetic debug passed at the recorded commit. A native RoboDojo evaluation using that same model constructor and checkpoint has started. Clean installation, the literal `eval.sh` launch path, full-episode parity with the historical native implementation, and the complete 6,300-episode suite remain unverified or unfinished. Synthetic debug is interface evidence, not a recovery-success measurement or a leaderboard result.

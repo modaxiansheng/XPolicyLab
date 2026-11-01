@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "rsiwam-frozen-runtime"
 version = "0.1.0"
-description = "Frozen RecoverWAM runtime for the RSIWAM XPolicyLab eval-only adapter"
+description = "RSIWAM frozen robot-policy runtime and XPolicyLab evaluation adapter"
 requires-python = ">=3.10"
 dependencies = []
 
