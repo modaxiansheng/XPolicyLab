@@ -34,7 +34,7 @@ Training used the `success133-ee16-rgb-lossless-train-v2` prepared export, with 
 
 ## Training
 
-Unsupported in this adapter; `train.sh` is intentionally absent. No training or weight update occurs during evaluation. The frozen candidate has 119 original optimizer steps plus 281 exact resumed steps, for step 400. The separate training artifact documents that lineage. The team has approved releasing the evaluated training/deployment code, exact weights, configuration and reproduction instructions within three days of verified leaderboard listing. The planned technical-report date is 2026-11-25 and is a separate deadline. This repository contains the RSIWAM evaluation code and small adaptation weights; the separate training-artifact release remains pending.
+Unsupported in this adapter; `train.sh` is intentionally absent. No training or weight update occurs during evaluation. The frozen candidate has 119 original optimizer steps plus 281 exact resumed steps, for step 400. The [public training-source companion](https://github.com/modaxiansheng/XPolicyLab/releases/tag/rsiwam-training-companion-20261101) documents that lineage, masks and contracts, with explicit omissions and external dependencies; it is not a verified end-to-end retraining package. The team has approved releasing the evaluated training/deployment code, exact weights, configuration and reproduction instructions within three days of verified leaderboard listing. The planned technical-report date is 2026-11-25 and is a separate deadline. This repository contains the RSIWAM evaluation code and small adaptation weights; complete evaluation results remain pending.
 
 ## Evaluation
 

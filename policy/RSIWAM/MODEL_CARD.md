@@ -37,6 +37,6 @@ The foundation is the frozen official VPP2 `joint2b_s100000` model; upstream cod
 - Native evaluation of the same fixed candidate has begun. The full 6,300-episode suite and official organizer verification are pending.
 - Synthetic debug does not establish task success, recovery capability, clean installation, or full-episode parity with the historical implementation.
 - Historical same-scene comparisons are partial development evidence. They are not an official score, and a failure-to-success pair alone does not prove recovery within an episode.
-- Success133 includes Agent action proxy labels whose execution equivalence is not certified. Training-source and reproducibility limitations are disclosed in the companion artifact.
+- Success133 includes Agent action proxy labels whose execution equivalence is not certified. Training-source and reproducibility limitations are disclosed in the [public companion artifact](https://github.com/modaxiansheng/XPolicyLab/releases/tag/rsiwam-training-companion-20261101).
 
 Team: RSIBot (independent team). Contact: 22110110@bjtu.edu.cn. Technical report planned for 2026-11-25; evaluated training/deployment artifacts are committed for release within three days of verified listing.
