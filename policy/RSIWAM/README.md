@@ -20,7 +20,11 @@ conda activate rsiwam-policy
 bash install.sh
 ```
 
-The accepted H800 service recorded Python dependencies including `torch==2.11.0+cu130` and `torchvision==0.26.0+cu130`; `bundle/constraints-reference.txt` contains the observed partial constraints. These are a reference, not a complete transitive lock or a clean-install guarantee. `install.sh` installs the local `recoverwam` source in editable mode, followed by XPolicyLab in the selected environment. Keep the adapter directory in place after installation. The simulator environment is separate.
+`install.sh` requires both `torch` and `torchvision` to be installed first. It reads their installed versions without importing the GPU runtime and pins both versions for every pip invocation, so dependency resolution cannot silently replace the selected pair. It installs the bundled requirements, the local `recoverwam` source in editable mode, and XPolicyLab in the selected environment. Keep the adapter directory in place after installation. The simulator environment is separate.
+
+Optional site constraints can be supplied with `RSIWAM_CONSTRAINTS=/path/to/constraints.txt bash install.sh`. The file must exist before installation starts; constraints that conflict with the preinstalled pair cause pip to fail. The installer does not select a CUDA build or certify driver compatibility.
+
+The historical H800 service recorded `torch==2.11.0+cu130` and `torchvision==0.26.0+cu130`; `bundle/constraints-reference.txt` preserves that partial snapshot and is not applied by default. The recorded A800 GPU debug instead used `torch==2.5.1+cu118`. These are environment observations, not a complete transitive lock or a clean-install guarantee.
 
 ## Data Processing
 

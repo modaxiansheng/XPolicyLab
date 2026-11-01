@@ -1,0 +1,34 @@
+{
+  "status": "INSTALLER_CPU_CONTRACT_CHECKS_PASSED",
+  "checks": [
+    "missing_torch_fails_before_pip",
+    "missing_torchvision_fails_before_pip",
+    "a800_versions_pinned_for_all_three_pip_commands",
+    "h800_versions_pinned_for_all_three_pip_commands",
+    "optional_constraints_propagated_without_replacing_pins",
+    "missing_optional_constraints_fails_before_pip",
+    "simulated_constraint_conflict_stops_and_cleans_up",
+    "later_pip_failure_stops_and_cleans_up"
+  ],
+  "all_cases_removed_temporary_constraints": true,
+  "real_metadata_script_executed": true,
+  "package_versions": "MOCKED",
+  "pip": "RECORDED_NOT_EXECUTED",
+  "clean_installation_tested": false,
+  "gpu_used": false,
+  "checked_at_utc": "2026-11-01T14:58:01.786835+00:00",
+  "sha256": {
+    "install.sh": "39f11b9c9a17038e246ff89d4aa8cd20200a5a72cafe69e22e0d542784e61d5d",
+    "checks/check_installer_contract.py": "2f47423fce70dfb8697324c81713bd1daa712cb5a5a2755189289e93c50ccc9a"
+  },
+  "schema": "rsiwam-installer-cpu-contract-checks-v1",
+  "command": "python3 policy/RSIWAM/checks/check_installer_contract.py",
+  "base_commit": "cf55069685d712e1143f952bcba0837121f7289f",
+  "shell_syntax": "PASS",
+  "git_diff_check": "PASS",
+  "original_cpu_verification_unchanged": true,
+  "bundled_source_model_weights_and_eval_launchers_unchanged": true,
+  "real_dependency_resolution_tested": false,
+  "package_binary_identity_or_cuda_compatibility_tested": false,
+  "independent_read_only_review": "No required fixes found"
+}
